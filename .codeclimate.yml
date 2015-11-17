@@ -1,0 +1,28 @@
+---
+engines:
+  csslint:
+    enabled: true
+  coffeelint:
+    enabled: true
+  eslint:
+    enabled: true
+  fixme:
+    enabled: true
+  rubocop:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+        - ruby
+ratings:
+  paths:
+  - "**.css"
+  - "**.coffee"
+  - "**.js"
+  - "**.jsx"
+  - "**.rb"
+exclude_paths:
+- features/**/*
+- script/**/*
+- test/**/*
