@@ -22,7 +22,7 @@ ratings:
   - "**.js"
   - "**.jsx"
   - "**.rb"
-exclude_paths:
+exclude_paths
 - features/**/*
 - script/**/*
 - test/**/*
