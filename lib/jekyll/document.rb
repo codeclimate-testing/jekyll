@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module Jekyll
+  # rubocop:disable ClassLength
   class Document
     include Comparable
 
@@ -30,7 +31,7 @@ module Jekyll
         categories_from_path(collection.relative_directory)
       end
 
-      data.default_proc = proc do |hash, key|
+      data.default_proc = proc do |_hash, key|
         site.frontmatter_defaults.find(relative_path, collection.label, key)
       end
 
@@ -58,6 +59,7 @@ module Jekyll
     # Merge some data in with this document's data.
     #
     # Returns the merged data.
+    # rubocop:disable AbcSize
     def merge_data!(other)
       if other.key?('categories') && !other['categories'].nil?
         if other['categories'].is_a?(String)
@@ -180,6 +182,7 @@ module Jekyll
     #   a key in the URL template and the corresponding value for this document.
     #
     # Returns the Hash of key-value pairs for replacement in the URL.
+    # rubocop:disable AbcSize
     def url_placeholders
       {
         collection:  collection.label,
@@ -275,6 +278,7 @@ module Jekyll
     # values
     #
     # Returns nothing.
+    # rubocop:disable AbcSize
     def read(opts = {})
       @to_liquid = nil
 
@@ -297,15 +301,16 @@ module Jekyll
           post_read
         rescue SyntaxError => e
           puts "YAML Exception reading #{path}: #{e.message}"
-        rescue Exception => e
+        rescue StandardError => e
           puts "Error reading file #{path}: #{e.message}"
         end
       end
     end
 
+    # rubocop:disable AbcSize
     def post_read
       if DATE_FILENAME_MATCHER =~ relative_path
-        m, cats, date, slug, ext = *relative_path.match(DATE_FILENAME_MATCHER)
+        _, _cats, date, slug, ext = *relative_path.match(DATE_FILENAME_MATCHER)
         merge_data!({
           "slug" => slug,
           "ext"  => ext
@@ -352,20 +357,20 @@ module Jekyll
     # Returns a Hash representing this Document's data.
     def to_liquid
       @to_liquid ||= if data.is_a?(Hash)
-        Utils.deep_merge_hashes Utils.deep_merge_hashes({
-          "output"        => output,
-          "content"       => content,
-          "relative_path" => relative_path,
-          "path"          => relative_path,
-          "url"           => url,
-          "collection"    => collection.label,
-          "next"          => next_doc,
-          "previous"      => previous_doc,
-          "id"            => id,
-        }, data), { 'excerpt' => data['excerpt'].to_s }
-      else
-        data
-      end
+                       Utils.deep_merge_hashes Utils.deep_merge_hashes({
+                         "output"        => output,
+                         "content"       => content,
+                         "relative_path" => relative_path,
+                         "path"          => relative_path,
+                         "url"           => url,
+                         "collection"    => collection.label,
+                         "next"          => next_doc,
+                         "previous"      => previous_doc,
+                         "id"            => id,
+                       }, data), { 'excerpt' => data['excerpt'].to_s }
+                     else
+                       data
+                     end
     end
 
     # The inspect string for this document.
